@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Box Plot | Video Game Sales</title>
+<link rel="stylesheet" href="style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo">GAME<span>SALES</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="data.html">Data</a></li>
+    <li><a href="viz1.html">Line Chart</a></li>
+    <li><a href="viz2.html">Stacked Bar</a></li>
+    <li><a href="viz3.html">Scatter Plot</a></li>
+    <li><a href="viz4.html" class="active">Box Plot</a></li>
+    <li><a href="viz5.html">Sankey</a></li>
+    <li><a href="summary.html">Summary</a></li>
+  </ul>
+</nav>
+
+<main class="viz-page">
+  <div class="viz-page-header">
+    <div class="viz-tag"><span class="dot"></span>D3.JS &nbsp;·&nbsp; INTERACTIVE</div>
+    <h1>Global Sales Distribution by Platform</h1>
+  </div>
+
+  <div class="viz-container" style="overflow-x:auto;">
+    <div id="boxplot"></div>
+  </div>
+
+  <div class="viz-desc">
+    <div class="desc-panel">
+      <h3>// About This Chart</h3>
+      <p>
+        This box plot visualizes the sales distribution of video games across different platforms, sorted by median sales. Each box shows the interquartile range (Q1 to Q3) with a line at the median. Whiskers extend to the farthest non-outlier value, and coral dots mark individual outliers. Hover over any box or outlier dot for detailed statistics.
+      </p>
+    </div>
+    <div class="desc-panel">
+      <h3>// Key Takeaway</h3>
+      <p>
+        Older platforms like the SEGA Genesis, NES, and Game Boy show notably higher median sales per game compared to modern consoles. This is likely because those platforms had far fewer titles overall, so individual games faced less competition and captured larger audience shares. Conversely, newer consoles such as the Xbox One and PlayStation 4 have much lower median sales per game, reflecting a heavily saturated market where consumer attention is spread across thousands of titles.
+      </p>
+    </div>
+  </div>
+</main>
+
+<div class="tooltip-box" id="tip"></div>
+
+<footer class="footer">
+  <p>DS4200 &nbsp;·&nbsp; Information Presentation and Data Visualization &nbsp;·&nbsp; Northeastern University</p>
+</footer>
+
+<script>
+const boxData = [
+  {"platform":"SEGA Genesis","q1":1.34,"median":1.76,"q3":2.6,"wmin":0.19,"wmax":4.34,"outliers":[6.03],"count":13},
+  {"platform":"NES","q1":1.04,"median":1.4,"q3":2.255,"wmin":0.28,"wmax":4.01,"outliers":[4.16,4.17,4.38,4.85,5.58,6.51],"count":95},
+  {"platform":"Game Boy","q1":0.385,"median":1.24,"q3":2.195,"wmin":0.17,"wmax":3.91,"outliers":[5.07,5.13,5.19,5.31,5.34,6.39],"count":87},
+  {"platform":"PS4","q1":0.3025,"median":0.68,"q3":1.7275,"wmin":0.17,"wmax":3.85,"outliers":[3.92,4.02,4.03,4.14,4.2,4.47],"count":186},
+  {"platform":"Xbox One","q1":0.3375,"median":0.63,"q3":1.3525,"wmin":0.17,"wmax":2.86,"outliers":[2.9,3.0,3.15,3.23,3.28,3.46],"count":124},
+  {"platform":"PS3","q1":0.3025,"median":0.6,"q3":1.1275,"wmin":0.17,"wmax":2.29,"outliers":[2.37,2.38,2.38,2.39,2.42,2.45],"count":842},
+  {"platform":"Xbox 360","q1":0.3,"median":0.56,"q3":1.1325,"wmin":0.17,"wmax":2.38,"outliers":[2.39,2.39,2.42,2.44,2.47,2.48],"count":800},
+  {"platform":"PS","q1":0.3025,"median":0.53,"q3":1.0875,"wmin":0.17,"wmax":2.25,"outliers":[2.28,2.31,2.31,2.32,2.4,2.41],"count":718},
+  {"platform":"PC","q1":0.27,"median":0.51,"q3":1.15,"wmin":0.17,"wmax":2.43,"outliers":[2.79,2.81,2.85,2.97,2.97,2.99],"count":238},
+  {"platform":"Atari 2600","q1":0.34,"median":0.5,"q3":0.805,"wmin":0.19,"wmax":1.46,"outliers":[1.59,1.6,1.64,1.65,1.97,2.13],"count":107},
+  {"platform":"PS2","q1":0.28,"median":0.48,"q3":1.01,"wmin":0.17,"wmax":2.1,"outliers":[2.11,2.11,2.13,2.18,2.21,2.22],"count":1263},
+  {"platform":"WiiU","q1":0.33,"median":0.48,"q3":0.9325,"wmin":0.18,"wmax":1.77,"outliers":[2.22,3.18,4.25,4.44,4.57,5.02],"count":80}
+];
+
+const margin = {top:50,right:30,bottom:90,left:70};
+const W = 760 - margin.left - margin.right;
+const H = 360 - margin.top - margin.bottom;
+
+const svg = d3.select("#boxplot").append("svg")
+  .attr("width", W + margin.left + margin.right)
+  .attr("height", H + margin.top + margin.bottom)
+  .style("background","transparent");
+
+const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+const tip = d3.select("#tip");
+
+const x = d3.scaleBand().domain(boxData.map(d=>d.platform)).range([0,W]).padding(0.38);
+const y = d3.scaleLog()
+  .domain([0.1, d3.max(boxData, d => Math.max(d.wmax, ...d.outliers))])
+  .range([H,0]);
+
+// grid
+g.selectAll(".gl").data([0.1,0.2,0.5,1,2,4]).enter().append("line")
+  .attr("x1",0).attr("x2",W)
+  .attr("y1",d=>y(d)).attr("y2",d=>y(d))
+  .attr("stroke","#1e2a3a").attr("stroke-dasharray","3,3");
+
+// axes
+const ab = g.append("g").attr("transform",`translate(0,${H})`).call(d3.axisBottom(x));
+ab.selectAll("text").attr("transform","rotate(-38)").style("text-anchor","end").style("fill","#64748b").style("font-family","Outfit").style("font-size","11px");
+ab.select(".domain").style("stroke","#1e2a3a");
+ab.selectAll(".tick line").style("stroke","#1e2a3a");
+
+const al = g.append("g").call(d3.axisLeft(y).tickValues([0.1,0.2,0.5,1,2,4]).tickFormat(d=>d<1?d.toFixed(1):d));
+al.select(".domain").style("stroke","#1e2a3a");
+al.selectAll(".tick line").style("stroke","#1e2a3a");
+al.selectAll("text").style("fill","#64748b").style("font-family","Outfit").style("font-size","11px");
+
+// labels
+svg.append("text").attr("transform","rotate(-90)")
+  .attr("x",-(margin.top+H/2)).attr("y",14)
+  .attr("text-anchor","middle").style("fill","#64748b").style("font-size","11px").style("font-family","Outfit")
+  .text("Global Sales (millions, log scale)");
+
+svg.append("text").attr("x",margin.left+W/2).attr("y",margin.top+H+80)
+  .attr("text-anchor","middle").style("fill","#64748b").style("font-size","11px").style("font-family","Outfit")
+  .text("Platform");
+
+svg.append("text").attr("x",margin.left+W/2).attr("y",18)
+  .attr("text-anchor","middle").style("fill","#e2e8f0").style("font-size","13px").style("font-family","Outfit").style("font-weight","700")
+  .text("Video Game Global Sales Distribution by Platform");
+
+// whisker lines
+g.selectAll(".wl").data(boxData).enter().append("line")
+  .attr("x1",d=>x(d.platform)+x.bandwidth()/2).attr("x2",d=>x(d.platform)+x.bandwidth()/2)
+  .attr("y1",d=>y(d.wmin)).attr("y2",d=>y(d.wmax))
+  .attr("stroke","#334155").attr("stroke-width",1.5);
+
+// boxes
+g.selectAll(".bx").data(boxData).enter().append("rect")
+  .attr("x",d=>x(d.platform)).attr("y",d=>y(d.q3))
+  .attr("width",x.bandwidth()).attr("height",d=>Math.max(1,y(d.q1)-y(d.q3)))
+  .attr("fill","#111827").attr("stroke","#00ff88").attr("stroke-width",1.5).attr("rx",3)
+  .style("cursor","pointer")
+  .on("mouseover",function(ev,d){
+    d3.select(this).attr("fill","rgba(0,255,136,0.12)");
+    tip.style("opacity",1).html(`<strong style="color:#00ff88">${d.platform}</strong><br>Games: ${d.count}<br>Q1: ${d.q1.toFixed(2)} M<br>Median: <span style="color:#00d4ff">${d.median.toFixed(2)} M</span><br>Q3: ${d.q3.toFixed(2)} M`);
+  })
+  .on("mousemove",ev=>tip.style("left",(ev.clientX+14)+"px").style("top",(ev.clientY-30)+"px"))
+  .on("mouseout",function(){d3.select(this).attr("fill","#111827");tip.style("opacity",0);});
+
+// median lines
+g.selectAll(".ml").data(boxData).enter().append("line")
+  .attr("x1",d=>x(d.platform)).attr("x2",d=>x(d.platform)+x.bandwidth())
+  .attr("y1",d=>y(d.median)).attr("y2",d=>y(d.median))
+  .attr("stroke","#00d4ff").attr("stroke-width",2.5);
+
+// caps
+["wmin","wmax"].forEach(k=>{
+  g.selectAll(".c"+k).data(boxData).enter().append("line")
+    .attr("x1",d=>x(d.platform)+x.bandwidth()*0.25).attr("x2",d=>x(d.platform)+x.bandwidth()*0.75)
+    .attr("y1",d=>y(d[k])).attr("y2",d=>y(d[k]))
+    .attr("stroke","#334155").attr("stroke-width",1.5);
+});
+
+// outliers
+boxData.forEach(d=>{
+  g.selectAll(`.o${d.platform.replace(/\s/g,'')}`).data(d.outliers.slice(0,6)).enter().append("circle")
+    .attr("cx",x(d.platform)+x.bandwidth()/2).attr("cy",v=>y(v))
+    .attr("r",3.5).attr("fill","#ff5f5f").attr("opacity",0.7).style("cursor","pointer")
+    .on("mouseover",function(ev,v){
+      tip.style("opacity",1).html(`<strong style="color:#ff5f5f">${d.platform}</strong><br>Outlier: ${v.toFixed(2)} M`);
+    })
+    .on("mousemove",ev=>tip.style("left",(ev.clientX+14)+"px").style("top",(ev.clientY-30)+"px"))
+    .on("mouseout",()=>tip.style("opacity",0));
+});
+
+// legend
+const lg = svg.append("g").attr("transform",`translate(${margin.left+W-180},${margin.top-6})`);
+[[0,"#00d4ff","Median line"],[14,"#ff5f5f","Outliers"]].forEach(([dy,c,l])=>{
+  lg.append("rect").attr("x",0).attr("y",dy).attr("width",10).attr("height",4).attr("rx",2).attr("fill",c);
+  lg.append("text").attr("x",15).attr("y",dy+4).style("fill","#64748b").style("font-size","10px").style("font-family","Outfit").text(l);
+});
+</script>
+</body>
+</html>

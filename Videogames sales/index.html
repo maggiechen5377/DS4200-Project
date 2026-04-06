@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Video Game Sales Analysis</title>
+<link rel="stylesheet" href="style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo">GAME<span>SALES</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="data.html">Data</a></li>
+    <li><a href="viz1.html">Line Chart</a></li>
+    <li><a href="viz2.html">Stacked Bar</a></li>
+    <li><a href="viz3.html">Scatter Plot</a></li>
+    <li><a href="viz4.html">Box Plot</a></li>
+    <li><a href="viz5.html">Sankey</a></li>
+    <li><a href="summary.html">Summary</a></li>
+  </ul>
+</nav>
+
+<main class="hero-page">
+
+  <!-- HERO -->
+  <div class="hero-grid-bg">
+    <div class="hero-eyebrow">// DS4200 &nbsp;·&nbsp; Final Project &nbsp;·&nbsp; Northeastern University</div>
+    <h1 class="hero-title">
+      <span class="hl-g">VIDEO GAME</span><br>
+      <span class="hl-c">SALES ANALYSIS</span>
+    </h1>
+    <p class="hero-sub">
+      Exploring global market dynamics across regions, genres, platforms, and publishers — 1980 to 2016.
+    </p>
+    <div class="hero-cta">
+      <a href="data.html" class="btn-primary">Explore the Data →</a>
+      <a href="summary.html" class="btn-ghost">View Findings</a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stat-row">
+    <div class="stat-item">
+      <span class="stat-num">8,300+</span>
+      <span class="stat-label">Games Analyzed</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">36</span>
+      <span class="stat-label">Years of Data</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">5</span>
+      <span class="stat-label">Visualizations</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">4</span>
+      <span class="stat-label">Global Regions</span>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="overview-section">
+    <div class="overview-block">
+      <h2>// Project Overview</h2>
+      <p>
+        Video games are very popular all over the world, and one key metric companies use to measure the success of their games is sales. The video game industry has grown into a global entertainment powerhouse, generating over $180 billion annually and reaching billions of players worldwide.
+      </p>
+      <p>
+        This project analyzes video game sales data to uncover patterns in consumer behavior and market dynamics across different regions, genres, publishers, and time periods. By visualizing sales trends, we aim to identify what drives commercial success in gaming and how regional preferences vary globally.
+      </p>
+    </div>
+    <div class="overview-block">
+      <h2>// Further Reading</h2>
+      <p>
+        This analysis provides valuable insights for industry stakeholders making strategic decisions about game development and marketing, while also revealing the cultural and economic forces shaping one of the world's fastest-growing entertainment sectors.
+      </p>
+      <p>
+        Further reading on video game sales analysis can be found at
+        <a href="https://www.vgchartz.com/" target="_blank">VGChartz</a>
+        and at the
+        <a href="https://www.kaggle.com/datasets/gregorut/videogamesales" target="_blank">Kaggle dataset page</a>.
+      </p>
+    </div>
+  </div>
+
+  <!-- VIZ CARDS -->
+  <div class="section-heading">
+    <span>// Visualizations</span>
+  </div>
+  <div class="viz-cards-grid">
+    <a href="viz1.html" class="viz-card-link">
+      <span class="vc-num">01</span>
+      <span class="vc-icon">📈</span>
+      <h3>Line Chart</h3>
+      <p>Global sales over time 1980 to 2016. Brush to zoom, hover for exact values.</p>
+      <span class="vc-arrow">→</span>
+    </a>
+    <a href="viz2.html" class="viz-card-link">
+      <span class="vc-num">02</span>
+      <span class="vc-icon">▬▬</span>
+      <h3>Stacked Bar</h3>
+      <p>Sales by genre and region with click highlight and sort dropdown.</p>
+      <span class="vc-arrow">→</span>
+    </a>
+    <a href="viz3.html" class="viz-card-link">
+      <span class="vc-num">03</span>
+      <span class="vc-icon">⬤</span>
+      <h3>Scatter Plot</h3>
+      <p>NA vs EU sales with a global sales cutoff slider filter.</p>
+      <span class="vc-arrow">→</span>
+    </a>
+    <a href="viz4.html" class="viz-card-link">
+      <span class="vc-num">04</span>
+      <span class="vc-icon">📊</span>
+      <h3>Box Plot</h3>
+      <p>Sales distribution by platform, built with D3.js and interactive tooltips.</p>
+      <span class="vc-arrow">→</span>
+    </a>
+    <a href="viz5.html" class="viz-card-link">
+      <span class="vc-num">05</span>
+      <span class="vc-icon">🔗</span>
+      <h3>Sankey Diagram</h3>
+      <p>Flow from top publishers to genres showing production patterns.</p>
+      <span class="vc-arrow">→</span>
+    </a>
+  </div>
+
+  <!-- TEAM -->
+  <div class="team-block">
+    <span class="team-label">// Team</span>
+    <div class="team-names">
+      <span class="team-chip">Maggie Chen</span>
+      <span class="team-chip">Jaden Hu</span>
+      <span class="team-chip">Hansen Yang</span>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <p>DS4200 &nbsp;·&nbsp; Information Presentation and Data Visualization &nbsp;·&nbsp; Northeastern University</p>
+</footer>
+
+</body>
+</html>
