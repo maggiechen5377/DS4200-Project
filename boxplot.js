@@ -14,6 +14,10 @@ const tooltip = d3.select(".tooltip");
 d3.csv("videogamesales.csv").then(data => {
   data.forEach(d => {
     d.Global_Sales = +d.Global_Sales;
+
+    if (d.Platform === "2600") {
+    d.Platform = "Atari 2600";
+  }
   });
 
   const filtered = data.filter(d =>
