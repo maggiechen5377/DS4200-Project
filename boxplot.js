@@ -11,7 +11,7 @@ const g = svg.append("g")
 
 const tooltip = d3.select(".tooltip");
  
-d3.csv("videogames.csv").then(data => {
+d3.csv("videogamesales.csv").then(data => {
   data.forEach(d => {
     d.Global_Sales = +d.Global_Sales;
   });
