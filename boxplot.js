@@ -18,6 +18,22 @@ d3.csv("videogamesales.csv").then(data => {
     if (d.Platform === "2600") {
     d.Platform = "Atari 2600";
   }
+
+    if (d.Platform === "GEN") {
+      d.Platform = "SEGA Genesis";
+    }
+
+    if (d.Platform === "GB") {
+      d.Platform = "Game Boy";
+    }
+
+    if (d.Platform === "XOne") {
+      d.Platform = "Xbox One";
+    }
+
+    if (d.Platform === "X360") {
+      d.Platform = "Xbox 360";
+    }
   });
 
   const filtered = data.filter(d =>
@@ -192,10 +208,36 @@ d3.csv("videogamesales.csv").then(data => {
       .data(d.outliers.slice(0,7))
       .enter()
       .append("circle")
-      .attr("cx", x(d.platform) + x.bandwidth() / 2)
-      .attr("cy", v => y(v))
-      .attr("r", 3)
-      .attr("fill", "red")
-      .attr("opacity", 0.25);
+    .attr("cx", x(d.platform) + x.bandwidth() / 2)
+    .attr("cy", v => y(v))
+    .attr("r", 2)
+    .attr("fill", "red")
+    .attr("opacity", 0.3)
+
+    .on("mouseover", function(event, v) {
+      tooltip
+        .style("opacity", 1)
+        .html(`
+          <strong>Platform:</strong> ${d.platform}<br>
+          <strong>Sales:</strong> ${v.toFixed(2)} million
+        `);
+    })
+
+    .on("mousemove", function(event) {
+      tooltip
+        .style("left", (event.pageX + 12) + "px")
+        .style("top", (event.pageY - 28) + "px");
+    })
+
+    .on("mouseout", function() {
+      tooltip.style("opacity", 0);
+    });
   });
+
+  svg.append("text")
+  .attr("x", width - 200)
+  .attr("y", margin.top - 10)
+  .attr("font-size", "12px")
+  .attr("fill", "gray")
+  .text("Red dots = outliers");
 });
