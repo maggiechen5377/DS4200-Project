@@ -2,7 +2,7 @@ const svg = d3.select("svg");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
-const margin = { top: 50, right: 40, bottom: 140, left: 80 };
+const margin = { top: 150, right: 40, bottom: 140, left: 120};
 const innerWidth = width - margin.left - margin.right;
 const innerHeight = height - margin.top - margin.bottom;
 
@@ -60,20 +60,16 @@ d3.csv("videogamesales.csv").then(data => {
   });
 
   stats.sort((a, b) => d3.descending(a.median, b.median));
-  const finalStats = stats;
+  const finalStats = stats.slice(0, 12);
 
   const x = d3.scaleBand()
     .domain(finalStats.map(d => d.platform))
     .range([0, innerWidth])
     .padding(0.35);
 
-  const y = d3.scaleLinear()
-    .domain([
-      0,
-      d3.max(finalStats, d => Math.max(d.whiskerMax, d3.max(d.outliers, o => o) || 0))
-    ])
-    .nice()
-    .range([innerHeight, 0]);
+  const y = d3.scaleLog()
+  .domain([0.1, d3.max(finalStats, d => d.whiskerMax)])
+  .range([innerHeight, 0]);
 
   g.append("g")
     .attr("transform", `translate(0,${innerHeight})`)
@@ -83,27 +79,31 @@ d3.csv("videogamesales.csv").then(data => {
     .style("text-anchor", "end");
 
   g.append("g")
-    .call(d3.axisLeft(y));
+    .call(
+      d3.axisLeft(y)
+        .tickValues([0.1, 0.2, 0.5, 1, 2, 4])
+        .tickFormat(d => d < 1 ? d.toFixed(1) : d)
+    );
 
   svg.append("text")
     .attr("class", "axis-label")
     .attr("transform", "rotate(-90)")
-    .attr("x", -height / 2)
+    .attr("x", -(margin.top + innerHeight / 2))
     .attr("y", 25)
     .attr("text-anchor", "middle")
     .text("Global Sales (millions)");
 
   svg.append("text")
     .attr("class", "axis-label")
-    .attr("x", width / 2)
-    .attr("y", height - 20)
+    .attr("x", margin.left + innerWidth / 2)
+    .attr("y", margin.top + innerHeight + 60)
     .attr("text-anchor", "middle")
     .text("Platform");
 
   svg.append("text")
     .attr("class", "title")
     .attr("x", width / 2)
-    .attr("y", 25)
+    .attr("y", margin.top/2)
     .attr("text-anchor", "middle")
     .text("Video Game Global Sales Distribution by Platform");
 
@@ -185,13 +185,13 @@ d3.csv("videogamesales.csv").then(data => {
 
   finalStats.forEach(d => {
     g.selectAll(`.outlier-${d.platform}`)
-      .data(d.outliers)
+      .data(d.outliers.slice(0,7))
       .enter()
       .append("circle")
       .attr("cx", x(d.platform) + x.bandwidth() / 2)
       .attr("cy", v => y(v))
       .attr("r", 3)
       .attr("fill", "red")
-      .attr("opacity", 0.6);
+      .attr("opacity", 0.25);
   });
 });
