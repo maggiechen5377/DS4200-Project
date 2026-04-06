@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sankey | Video Game Sales</title>
+<link rel="stylesheet" href="style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.12.3/d3-sankey.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo">GAME<span>SALES</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="data.html">Data</a></li>
+    <li><a href="line_chart.html">Line Chart</a></li>
+    <li><a href="stacked_bar_chart.html">Stacked Bar</a></li>
+    <li><a href="scatter_plot.html">Scatter Plot</a></li>
+    <li><a href="box_plot.html">Box Plot</a></li>
+    <li><a href="sankey_diagram.html">Sankey</a></li>
+    <li><a href="summary.html">Summary</a></li>
+  </ul>
+</nav>
+
+<main class="viz-page">
+  <div class="viz-page-header">
+    <div class="viz-tag"><span class="dot"></span>D3.JS SANKEY &nbsp;·&nbsp; INTERACTIVE</div>
+    <h1>Publisher to Genre Flow: Top 8 Publishers</h1>
+  </div>
+
+  <div class="viz-container" style="overflow-x:auto;">
+    <div id="sankey"></div>
+  </div>
+
+  <div class="viz-desc">
+    <div class="desc-panel">
+      <h3>// About This Chart</h3>
+      <p>
+        This Sankey diagram shows the relationship between the top 8 publishers (by game count) and the genres they produce. The thickness of each flow represents the number of games that publisher produced in that genre. Hover over any node or link to see the exact count. Publishers are shown on the left and genres on the right.
+      </p>
+    </div>
+    <div class="desc-panel">
+      <h3>// Key Takeaway</h3>
+      <p>
+        Electronic Arts creates the most games overall, with the thickest flow going into the Sports genre, indicating that EA dominates sports game production. Action and Sports are the most popular genres across all top publishers, as reflected by their thick outgoing flows. Genres like Puzzle, Adventure, and Strategy have noticeably thinner flows, meaning publishers produce comparatively fewer titles in those categories.
+      </p>
+    </div>
+  </div>
+</main>
+
+<div class="tooltip-box" id="tip"></div>
+
+<footer class="footer">
+  <p>DS4200 &nbsp;·&nbsp; Information Presentation and Data Visualization &nbsp;·&nbsp; Northeastern University</p>
+</footer>
+
+<script>
+const flowData = [{"Publisher":"Activision","Genre":"Action","count":205},{"Publisher":"Activision","Genre":"Adventure","count":12},{"Publisher":"Activision","Genre":"Fighting","count":5},{"Publisher":"Activision","Genre":"Misc","count":77},{"Publisher":"Activision","Genre":"Platform","count":44},{"Publisher":"Activision","Genre":"Puzzle","count":3},{"Publisher":"Activision","Genre":"Racing","count":32},{"Publisher":"Activision","Genre":"Role-Playing","count":36},{"Publisher":"Activision","Genre":"Shooter","count":111},{"Publisher":"Activision","Genre":"Simulation","count":15},{"Publisher":"Activision","Genre":"Sports","count":94},{"Publisher":"Activision","Genre":"Strategy","count":13},{"Publisher":"Electronic Arts","Genre":"Action","count":137},{"Publisher":"Electronic Arts","Genre":"Adventure","count":6},{"Publisher":"Electronic Arts","Genre":"Fighting","count":37},{"Publisher":"Electronic Arts","Genre":"Misc","count":26},{"Publisher":"Electronic Arts","Genre":"Platform","count":11},{"Publisher":"Electronic Arts","Genre":"Puzzle","count":6},{"Publisher":"Electronic Arts","Genre":"Racing","count":127},{"Publisher":"Electronic Arts","Genre":"Role-Playing","count":29},{"Publisher":"Electronic Arts","Genre":"Shooter","count":102},{"Publisher":"Electronic Arts","Genre":"Simulation","count":84},{"Publisher":"Electronic Arts","Genre":"Sports","count":461},{"Publisher":"Electronic Arts","Genre":"Strategy","count":17},{"Publisher":"Konami Digital Entertainment","Genre":"Action","count":72},{"Publisher":"Konami Digital Entertainment","Genre":"Adventure","count":11},{"Publisher":"Konami Digital Entertainment","Genre":"Fighting","count":2},{"Publisher":"Konami Digital Entertainment","Genre":"Misc","count":35},{"Publisher":"Konami Digital Entertainment","Genre":"Platform","count":22},{"Publisher":"Konami Digital Entertainment","Genre":"Racing","count":1},{"Publisher":"Konami Digital Entertainment","Genre":"Role-Playing","count":18},{"Publisher":"Konami Digital Entertainment","Genre":"Shooter","count":14},{"Publisher":"Konami Digital Entertainment","Genre":"Simulation","count":43},{"Publisher":"Konami Digital Entertainment","Genre":"Sports","count":134},{"Publisher":"Konami Digital Entertainment","Genre":"Strategy","count":17},{"Publisher":"Namco Bandai Games","Genre":"Action","count":67},{"Publisher":"Namco Bandai Games","Genre":"Adventure","count":10},{"Publisher":"Namco Bandai Games","Genre":"Fighting","count":82},{"Publisher":"Namco Bandai Games","Genre":"Misc","count":40},{"Publisher":"Namco Bandai Games","Genre":"Platform","count":4},{"Publisher":"Namco Bandai Games","Genre":"Puzzle","count":12},{"Publisher":"Namco Bandai Games","Genre":"Racing","count":10},{"Publisher":"Namco Bandai Games","Genre":"Role-Playing","count":74},{"Publisher":"Namco Bandai Games","Genre":"Shooter","count":15},{"Publisher":"Namco Bandai Games","Genre":"Simulation","count":16},{"Publisher":"Namco Bandai Games","Genre":"Sports","count":24},{"Publisher":"Namco Bandai Games","Genre":"Strategy","count":28},{"Publisher":"Nintendo","Genre":"Action","count":63},{"Publisher":"Nintendo","Genre":"Adventure","count":25},{"Publisher":"Nintendo","Genre":"Fighting","count":16},{"Publisher":"Nintendo","Genre":"Misc","count":75},{"Publisher":"Nintendo","Genre":"Platform","count":106},{"Publisher":"Nintendo","Genre":"Puzzle","count":62},{"Publisher":"Nintendo","Genre":"Racing","count":35},{"Publisher":"Nintendo","Genre":"Role-Playing","count":93},{"Publisher":"Nintendo","Genre":"Shooter","count":22},{"Publisher":"Nintendo","Genre":"Simulation","count":24},{"Publisher":"Nintendo","Genre":"Sports","count":49},{"Publisher":"Nintendo","Genre":"Strategy","count":25},{"Publisher":"Sony Computer Entertainment","Genre":"Action","count":66},{"Publisher":"Sony Computer Entertainment","Genre":"Adventure","count":18},{"Publisher":"Sony Computer Entertainment","Genre":"Fighting","count":16},{"Publisher":"Sony Computer Entertainment","Genre":"Misc","count":92},{"Publisher":"Sony Computer Entertainment","Genre":"Platform","count":57},{"Publisher":"Sony Computer Entertainment","Genre":"Puzzle","count":5},{"Publisher":"Sony Computer Entertainment","Genre":"Racing","count":47},{"Publisher":"Sony Computer Entertainment","Genre":"Role-Playing","count":28},{"Publisher":"Sony Computer Entertainment","Genre":"Shooter","count":39},{"Publisher":"Sony Computer Entertainment","Genre":"Simulation","count":11},{"Publisher":"Sony Computer Entertainment","Genre":"Sports","count":92},{"Publisher":"Sony Computer Entertainment","Genre":"Strategy","count":4},{"Publisher":"THQ","Genre":"Action","count":128},{"Publisher":"THQ","Genre":"Adventure","count":26},{"Publisher":"THQ","Genre":"Fighting","count":68},{"Publisher":"THQ","Genre":"Misc","count":45},{"Publisher":"THQ","Genre":"Platform","count":63},{"Publisher":"THQ","Genre":"Puzzle","count":12},{"Publisher":"THQ","Genre":"Racing","count":64},{"Publisher":"THQ","Genre":"Role-Playing","count":2},{"Publisher":"THQ","Genre":"Shooter","count":21},{"Publisher":"THQ","Genre":"Simulation","count":14},{"Publisher":"THQ","Genre":"Sports","count":16},{"Publisher":"THQ","Genre":"Strategy","count":15},{"Publisher":"Ubisoft","Genre":"Action","count":113},{"Publisher":"Ubisoft","Genre":"Adventure","count":31},{"Publisher":"Ubisoft","Genre":"Fighting","count":13},{"Publisher":"Ubisoft","Genre":"Misc","count":87},{"Publisher":"Ubisoft","Genre":"Platform","count":29},{"Publisher":"Ubisoft","Genre":"Puzzle","count":8},{"Publisher":"Ubisoft","Genre":"Racing","count":25},{"Publisher":"Ubisoft","Genre":"Role-Playing","count":25},{"Publisher":"Ubisoft","Genre":"Shooter","count":66},{"Publisher":"Ubisoft","Genre":"Simulation","count":70},{"Publisher":"Ubisoft","Genre":"Sports","count":32},{"Publisher":"Ubisoft","Genre":"Strategy","count":15}];
+
+const publishers = ["Electronic Arts","Activision","Nintendo","Ubisoft","Sony Computer Entertainment","THQ","Namco Bandai Games","Konami Digital Entertainment"];
+const genres = ["Action","Sports","Shooter","Role-Playing","Platform","Misc","Racing","Fighting","Simulation","Puzzle","Adventure","Strategy"];
+const nodeList = [...publishers,...genres];
+const ni = Object.fromEntries(nodeList.map((n,i)=>[n,i]));
+const nodes = nodeList.map(name=>({name}));
+const links = flowData.map(d=>({source:ni[d.Publisher],target:ni[d.Genre],value:d.count}));
+
+const W=820, H=560;
+const svg = d3.select("#sankey").append("svg").attr("width",W).attr("height",H).style("background","transparent");
+
+const sankey = d3.sankey().nodeWidth(18).nodePadding(9).extent([[24,24],[W-24,H-24]]);
+const {nodes:sNodes,links:sLinks} = sankey({nodes:nodes.map(d=>({...d})),links:links.map(d=>({...d}))});
+
+const pubColor = d3.scaleOrdinal(["#00ff88","#00d4ff","#ff5f5f","#ffd060","#a855f7","#f97316","#ec4899","#22d3ee"]).domain(publishers);
+const tip = d3.select("#tip");
+
+// links
+svg.append("g").selectAll("path").data(sLinks).enter().append("path")
+  .attr("d",d3.sankeyLinkHorizontal())
+  .attr("stroke",d=>pubColor(nodes[d.source.index].name))
+  .attr("stroke-width",d=>Math.max(1,d.width))
+  .attr("fill","none").attr("opacity",0.22)
+  .on("mouseover",function(ev,d){
+    d3.select(this).attr("opacity",0.55);
+    tip.style("opacity",1).html(`<strong style="color:#e2e8f0">${nodes[d.source.index].name}</strong><br>→ <span style="color:#00d4ff">${nodes[d.target.index].name}</span><br>Games: ${d.value}`);
+  })
+  .on("mousemove",ev=>tip.style("left",(ev.clientX+14)+"px").style("top",(ev.clientY-30)+"px"))
+  .on("mouseout",function(){d3.select(this).attr("opacity",0.22);tip.style("opacity",0);});
+
+// nodes
+const ng = svg.append("g").selectAll("g").data(sNodes).enter().append("g");
+
+ng.append("rect")
+  .attr("x",d=>d.x0).attr("y",d=>d.y0)
+  .attr("height",d=>Math.max(1,d.y1-d.y0)).attr("width",d=>d.x1-d.x0)
+  .attr("fill",d=>publishers.includes(d.name)?pubColor(d.name):"#243044")
+  .attr("stroke",d=>publishers.includes(d.name)?"transparent":"rgba(0,212,255,0.3)")
+  .attr("rx",3)
+  .on("mouseover",function(ev,d){
+    tip.style("opacity",1).html(`<strong style="color:#e2e8f0">${d.name}</strong><br>Total games: ${d.value}`);
+  })
+  .on("mousemove",ev=>tip.style("left",(ev.clientX+14)+"px").style("top",(ev.clientY-30)+"px"))
+  .on("mouseout",()=>tip.style("opacity",0));
+
+ng.append("text")
+  .attr("x",d=>d.x0<W/2?d.x1+7:d.x0-7)
+  .attr("y",d=>(d.y1+d.y0)/2)
+  .attr("dy","0.35em")
+  .attr("text-anchor",d=>d.x0<W/2?"start":"end")
+  .style("fill","#94a3b8").style("font-size","11px").style("font-family","Outfit")
+  .text(d=>d.name.length>18?d.name.slice(0,16)+"…":d.name);
+
+svg.append("text").attr("x",W/2).attr("y",12)
+  .attr("text-anchor","middle").style("fill","#e2e8f0").style("font-size","13px")
+  .style("font-family","Outfit").style("font-weight","700")
+  .text("Publisher to Genre Flow (by game count)");
+</script>
+</body>
+</html>

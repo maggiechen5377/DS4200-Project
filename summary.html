@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Summary | Video Game Sales</title>
+<link rel="stylesheet" href="style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo">GAME<span>SALES</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="data.html">Data</a></li>
+    <li><a href="viz1.html">Line Chart</a></li>
+    <li><a href="viz2.html">Stacked Bar</a></li>
+    <li><a href="viz3.html">Scatter Plot</a></li>
+    <li><a href="viz4.html">Box Plot</a></li>
+    <li><a href="viz5.html">Sankey</a></li>
+    <li><a href="summary.html" class="active">Summary</a></li>
+  </ul>
+</nav>
+
+<main class="content-page">
+  <div class="page-header">
+    <span class="page-eyebrow">// Findings</span>
+    <h1 class="page-title">Summary &amp; <span class="hl">Conclusions</span></h1>
+  </div>
+
+  <div class="findings-grid">
+    <div class="finding-card">
+      <h4>Video game sales peaked in 2008</h4>
+      <p>
+        The line chart shows that global video game sales peaked at approximately 630 million units in 2008 before declining steadily through 2016. The sharp drop after 2012 reflects the industry's shift toward digital distribution channels, which are not captured in this dataset, as well as the growing influence of mobile gaming.
+      </p>
+    </div>
+    <div class="finding-card">
+      <h4>Older platforms outperform newer ones per game</h4>
+      <p>
+        The box plot reveals that classic platforms like the SEGA Genesis, NES, and Game Boy have significantly higher median sales per title compared to modern consoles like the Xbox One and PS4. A less saturated market in earlier eras meant fewer titles competed for consumer attention, so individual games captured larger audience shares.
+      </p>
+    </div>
+    <div class="finding-card">
+      <h4>Publishers diversify broadly across genres</h4>
+      <p>
+        The Sankey diagram shows that all top publishers produce games across a wide variety of genres rather than specializing in one category. This suggests publishers aim to maximize profit by catering to many different audiences. Electronic Arts leads in Sports, while Nintendo shows the most diverse portfolio including strong Platform and Role-Playing offerings.
+      </p>
+    </div>
+    <div class="finding-card">
+      <h4>NA and EU sales are positively correlated</h4>
+      <p>
+        The scatter plot demonstrates a strong positive correlation between North American and European sales. Games that perform well in one western region generally perform well in the other. Notable exceptions include FIFA titles, which skew heavily European, and American sports games like NBA titles, which show strong NA performance with limited EU sales.
+      </p>
+    </div>
+    <div class="finding-card">
+      <h4>Action dominates globally; Japan prefers RPGs</h4>
+      <p>
+        The stacked bar chart confirms that Action is the leading genre by total worldwide sales. However, Japan stands out: Role-Playing games generate a disproportionately high share of Japanese sales, reflecting a long-standing cultural preference rooted in franchises like Final Fantasy and Dragon Quest.
+      </p>
+    </div>
+    <div class="finding-card">
+      <h4>North America leads most markets</h4>
+      <p>
+        Across nearly every genre and platform, North America accounts for the largest share of global sales, often 40 to 50 percent of total revenue. Europe consistently comes second, while Japan and Other regions together represent the remaining share. Exceptions arise in soccer games (Europe dominant) and RPGs (Japan dominant).
+      </p>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3>// Future Directions</h3>
+    <p>
+      In the future, additional analysis could investigate specific games and their regional sales trajectories over time, or examine how individual publishers evolved and when they declined in market share. It would also be valuable to supplement this dataset with digital sales data, as the current dataset only captures physical sales and a subset of tracked digital titles.
+    </p>
+    <p>
+      Incorporating streaming and subscription service data would provide a more complete picture of the modern gaming landscape. Another promising direction is applying predictive modeling to estimate commercial success based on genre, platform, and release year, building on the regional correlation patterns observed in the scatter plot.
+    </p>
+  </div>
+
+  <div class="info-card" style="border-color: rgba(0,255,136,0.2);">
+    <h3>// Team</h3>
+    <p>Maggie Chen &nbsp;·&nbsp; Jaden Hu &nbsp;·&nbsp; Hansen Yang</p>
+    <p style="margin-top:0.4rem;">DS4200: Information Presentation and Data Visualization &nbsp;·&nbsp; Northeastern University</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>DS4200 &nbsp;·&nbsp; Information Presentation and Data Visualization &nbsp;·&nbsp; Northeastern University</p>
+</footer>
+</body>
+</html>
