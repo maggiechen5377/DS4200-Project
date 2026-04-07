@@ -34,9 +34,9 @@
     <div style="margin-bottom:1rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
       <label style="font-size:0.85rem; color:#64748b; font-family:Outfit,sans-serif;">
         Global Sales cutoff (max):
-        <input type="range" id="slider" min="1" max="85" step="0.5" value="15"
+        <input type="range" id="slider" min="0.17" max="82.74" step="0.1" value="0.47"
           style="margin-left:0.5rem; accent-color:#00ff88; width:180px; vertical-align:middle;"/>
-        <span id="sliderVal" style="color:#00ff88; font-family:'Press Start 2P',monospace; font-size:0.55rem; margin-left:0.5rem;">15M</span>
+        <span id="sliderVal" style="color:#00ff88; font-family:'Press Start 2P',monospace; font-size:0.55rem; margin-left:0.5rem;">0.47M</span>
       </label>
       <span id="countLabel" style="font-size:0.8rem; color:#64748b; font-family:Outfit,sans-serif;"></span>
     </div>
@@ -191,7 +191,7 @@ d3.csv("videogamesales.csv").then(raw => {
     EU_Sales: +d.EU_Sales || 0,
     Global_Sales: +d.Global_Sales || 0
   })).filter(d => d.NA_Sales > 0 && d.EU_Sales > 0 && d.Genre);
-  update(15);
+  update(0.47);
 }).catch(err => {
   console.error("CSV load error:", err);
   document.getElementById("scatter").innerHTML = '<p style="color:#ff5f5f;padding:1rem;">Could not load CSV file. Make sure videogamesales.csv is in the same folder.</p>';
