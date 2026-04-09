@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Stacked Bar | Video Game Sales</title>
+<title>Sankey | Video Game Sales</title>
 <link rel="stylesheet" href="style.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/vega@6?noext"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-lite@6.1.0?noext"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-embed@7?noext"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
 </head>
 <body>
 
@@ -28,25 +26,25 @@
 
 <main class="viz-page">
   <div class="viz-page-header">
-    <div class="viz-tag"><span class="dot"></span>ALTAIR &nbsp;·&nbsp; INTERACTIVE</div>
-    <h1>Video Game Sales by Genre and Region</h1>
+    <div class="viz-tag"><span class="dot"></span>PLOTLY &nbsp;·&nbsp; INTERACTIVE</div>
+    <h1>Publisher to Genre Flow: Top 8 Publishers</h1>
   </div>
 
-  <div class="viz-container">
-    <div id="chart"></div>
+  <div class="viz-container" style="overflow-x:auto;">
+    <div id="sankey"></div>
   </div>
 
   <div class="viz-desc">
     <div class="desc-panel">
       <h3>// About This Chart</h3>
       <p>
-        This interactive horizontal stacked bar chart displays cumulative sales (in millions) for each video game genre, with bars subdivided into four color-coded segments representing North America, Europe, Japan, and Other regions. Click any genre bar to highlight it and dim the rest. Hover over a segment for exact sales figures and regional percentages.
+        This Sankey diagram shows the relationship between the top 8 publishers (by game count) and the genres they produce. The thickness of each flow represents the number of games that publisher produced in that genre. Hover over any node or link to see the exact count. Publishers are shown on the left and genres on the right.
       </p>
     </div>
     <div class="desc-panel">
       <h3>// Key Takeaway</h3>
       <p>
-        North America consistently dominates across nearly every genre, often accounting for 40 to 50 percent of total sales. Action is the top-selling genre by a wide margin, followed by Sports and Shooter. Japan is a notable exception, showing a disproportionately strong presence in Role-Playing games, reflecting a cultural affinity for the format rooted in franchises like Final Fantasy and Dragon Quest. Genres such as Puzzle, Strategy, and Adventure have comparatively limited global reach.
+        Electronic Arts creates the most games overall, with the thickest flow going into the Sports genre, indicating that EA dominates sports game production. Action and Sports are the most popular genres across all top publishers, as reflected by their thick outgoing flows. Genres like Puzzle, Adventure, and Strategy have noticeably thinner flows, meaning publishers produce comparatively fewer titles in those categories.
       </p>
     </div>
   </div>
@@ -57,108 +55,41 @@
 </footer>
 
 <script>
-const genreData = [
-  {"Genre":"Action","Region":"North America","Sales":810.34,"Pct":50.2,"Total":1614.76},
-  {"Genre":"Action","Region":"Europe","Sales":493.73,"Pct":30.6,"Total":1614.76},
-  {"Genre":"Action","Region":"Japan","Sales":132.03,"Pct":8.2,"Total":1614.76},
-  {"Genre":"Action","Region":"Other","Sales":178.66,"Pct":11.1,"Total":1614.76},
-  {"Genre":"Sports","Region":"North America","Sales":630.35,"Pct":51.1,"Total":1233.62},
-  {"Genre":"Sports","Region":"Europe","Sales":357.26,"Pct":28.9,"Total":1233.62},
-  {"Genre":"Sports","Region":"Japan","Sales":117.86,"Pct":9.6,"Total":1233.62},
-  {"Genre":"Sports","Region":"Other","Sales":128.15,"Pct":10.4,"Total":1233.62},
-  {"Genre":"Shooter","Region":"North America","Sales":553.09,"Pct":56.1,"Total":986.57},
-  {"Genre":"Shooter","Region":"Europe","Sales":300.51,"Pct":30.5,"Total":986.57},
-  {"Genre":"Shooter","Region":"Japan","Sales":33.65,"Pct":3.4,"Total":986.57},
-  {"Genre":"Shooter","Region":"Other","Sales":99.32,"Pct":10.1,"Total":986.57},
-  {"Genre":"Role-Playing","Region":"North America","Sales":312.72,"Pct":35.8,"Total":872.55},
-  {"Genre":"Role-Playing","Region":"Europe","Sales":180.89,"Pct":20.7,"Total":872.55},
-  {"Genre":"Role-Playing","Region":"Japan","Sales":321.91,"Pct":36.9,"Total":872.55},
-  {"Genre":"Role-Playing","Region":"Other","Sales":57.03,"Pct":6.5,"Total":872.55},
-  {"Genre":"Platform","Region":"North America","Sales":429.48,"Pct":53.5,"Total":802.18},
-  {"Genre":"Platform","Region":"Europe","Sales":194.74,"Pct":24.3,"Total":802.18},
-  {"Genre":"Platform","Region":"Japan","Sales":127.93,"Pct":15.9,"Total":802.18},
-  {"Genre":"Platform","Region":"Other","Sales":50.03,"Pct":6.2,"Total":802.18},
-  {"Genre":"Misc","Region":"North America","Sales":369.25,"Pct":50.3,"Total":734.02},
-  {"Genre":"Misc","Region":"Europe","Sales":204.44,"Pct":27.8,"Total":734.02},
-  {"Genre":"Misc","Region":"Japan","Sales":89.86,"Pct":12.2,"Total":734.02},
-  {"Genre":"Misc","Region":"Other","Sales":70.47,"Pct":9.6,"Total":734.02},
-  {"Genre":"Racing","Region":"North America","Sales":331.47,"Pct":48.5,"Total":683.89},
-  {"Genre":"Racing","Region":"Europe","Sales":224.54,"Pct":32.8,"Total":683.89},
-  {"Genre":"Racing","Region":"Japan","Sales":54.05,"Pct":7.9,"Total":683.89},
-  {"Genre":"Racing","Region":"Other","Sales":73.83,"Pct":10.8,"Total":683.89},
-  {"Genre":"Fighting","Region":"North America","Sales":209.59,"Pct":50.5,"Total":414.8},
-  {"Genre":"Fighting","Region":"Europe","Sales":95.88,"Pct":23.1,"Total":414.8},
-  {"Genre":"Fighting","Region":"Japan","Sales":74.55,"Pct":18.0,"Total":414.8},
-  {"Genre":"Fighting","Region":"Other","Sales":34.78,"Pct":8.4,"Total":414.8},
-  {"Genre":"Simulation","Region":"North America","Sales":167.04,"Pct":46.2,"Total":361.27},
-  {"Genre":"Simulation","Region":"Europe","Sales":107.46,"Pct":29.7,"Total":361.27},
-  {"Genre":"Simulation","Region":"Japan","Sales":57.37,"Pct":15.9,"Total":361.27},
-  {"Genre":"Simulation","Region":"Other","Sales":29.4,"Pct":8.1,"Total":361.27},
-  {"Genre":"Puzzle","Region":"North America","Sales":107.08,"Pct":49.0,"Total":218.41},
-  {"Genre":"Puzzle","Region":"Europe","Sales":46.63,"Pct":21.4,"Total":218.41},
-  {"Genre":"Puzzle","Region":"Japan","Sales":53.63,"Pct":24.6,"Total":218.41},
-  {"Genre":"Puzzle","Region":"Other","Sales":11.07,"Pct":5.1,"Total":218.41},
-  {"Genre":"Adventure","Region":"North America","Sales":86.91,"Pct":47.0,"Total":184.81},
-  {"Genre":"Adventure","Region":"Europe","Sales":55.98,"Pct":30.3,"Total":184.81},
-  {"Genre":"Adventure","Region":"Japan","Sales":27.51,"Pct":14.9,"Total":184.81},
-  {"Genre":"Adventure","Region":"Other","Sales":14.41,"Pct":7.8,"Total":184.81},
-  {"Genre":"Strategy","Region":"North America","Sales":59.1,"Pct":40.1,"Total":147.24},
-  {"Genre":"Strategy","Region":"Europe","Sales":38.03,"Pct":25.8,"Total":147.24},
-  {"Genre":"Strategy","Region":"Japan","Sales":40.64,"Pct":27.6,"Total":147.24},
-  {"Genre":"Strategy","Region":"Other","Sales":9.47,"Pct":6.4,"Total":147.24}
-];
+const labels = ["Activision","Electronic Arts","Konami Digital Entertainment","Namco Bandai Games","Nintendo","Sony Computer Entertainment","THQ","Ubisoft","Action","Adventure","Fighting","Misc","Platform","Puzzle","Racing","Role-Playing","Shooter","Simulation","Sports","Strategy"];
 
-const sortOptions = {
-  "Total Sales": ["Action","Sports","Shooter","Role-Playing","Platform","Misc","Racing","Fighting","Simulation","Puzzle","Adventure","Strategy"],
-  "NA Sales":    ["Action","Sports","Shooter","Role-Playing","Platform","Misc","Racing","Fighting","Simulation","Puzzle","Adventure","Strategy"],
-  "EU Sales":    ["Action","Sports","Shooter","Role-Playing","Platform","Misc","Racing","Fighting","Simulation","Puzzle","Adventure","Strategy"],
-  "JP Sales":    ["Role-Playing","Action","Sports","Puzzle","Platform","Misc","Fighting","Shooter","Racing","Simulation","Adventure","Strategy"]
-};
+const sources = [0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,7,7,7,7];
 
-const spec = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
-  "background": "transparent",
-  "config": {
-    "axis": {"labelColor":"#64748b","tickColor":"#1e2a3a","gridColor":"#1e2a3a","domainColor":"#1e2a3a","titleColor":"#64748b","labelFont":"Outfit","titleFont":"Outfit"},
-    "title": {"color":"#e2e8f0","font":"Outfit","fontSize":14,"fontWeight":600},
-    "legend": {"labelColor":"#64748b","titleColor":"#64748b","labelFont":"Outfit","titleFont":"Outfit"}
+const targets = [8,9,10,11,12,13,14,15,16,17,18,19,8,9,10,11,12,13,14,15,16,17,18,19,8,9,10,11,12,14,15,16,17,18,19,8,9,10,11,12,13,14,15,16,17,18,19,8,9,10,11,12,13,14,15,16,17,18,19,8,9,10,11,12,13,14,15,16,17,18,19,8,9,10,11,12,13,14,15,16,17,18,19,8,9,10,11,12,13,14,15,16,17,18,19];
+
+const values = [205,12,5,77,44,3,32,36,111,15,94,13,137,6,37,26,11,6,127,29,102,84,461,17,72,11,2,35,22,1,18,14,43,134,17,67,10,82,40,4,12,10,74,15,16,24,28,63,25,16,75,106,62,35,93,22,24,49,25,66,18,16,92,57,5,47,28,39,11,92,4,128,26,68,45,63,12,64,2,21,14,16,15,113,31,13,87,29,8,25,25,66,70,32,15];
+
+const data = [{
+  type: "sankey",
+  orientation: "h",
+  node: {
+    pad: 25,
+    thickness: 20,
+    line: { color: "black", width: 0.5 },
+    label: labels,
+    color: "rgba(100, 116, 139, 0.8)"
   },
-  "data": {"values": genreData},
-  "layer": [
-    {
-      "mark": {"type": "bar"},
-      "encoding": {
-        "x": {"field":"Sales","type":"quantitative","title":"Total Sales (millions)"},
-        "y": {"field":"Genre","type":"nominal","title":"Genre","sort": sortOptions["Total Sales"]},
-        "color": {
-          "field":"Region","type":"nominal","title":"Region",
-          "scale": {"domain":["North America","Europe","Japan","Other"],"range":["#F58518","#E45756","#4C78A8","#72B7B2"]}
-        },
-        "opacity": {"condition":{"param":"sel","value":1.0},"value":0.3},
-        "tooltip": [
-          {"field":"Genre","title":"Genre"},
-          {"field":"Region","title":"Region"},
-          {"field":"Sales","title":"Sales (M)","format":".1f"},
-          {"field":"Pct","title":"% of Genre","format":".1f"},
-          {"field":"Total","title":"Genre Total (M)","format":".1f"}
-        ]
-      },
-      "params": [{"name":"sel","select":{"type":"point","fields":["Genre"],"on":"click"},"value":[]}]
-    },
-    {
-      "mark": {"type":"text","align":"right","color":"#64748b","fontSize":11},
-      "encoding": {
-        "x": {"value": 720},
-        "y": {"value": -10},
-        "text": {"value": "Click to highlight · Double-click to reset"}
-      }
-    }
-  ],
-  "title": "Video Game Sales by Genre and Region",
-  "width": 720,
-  "height": 420
+  link: {
+    source: sources,
+    target: targets,
+    value: values
+  }
+}];
+
+const layout = {
+  title: { text: "Publisher vs Genre Sankey Diagram", font: { family: "Outfit, sans-serif", color: "#e2e8f0", size: 14 } },
+  paper_bgcolor: "transparent",
+  plot_bgcolor: "transparent",
+  font: { family: "Outfit, sans-serif", color: "#e2e8f0", size: 12 },
+  height: 600,
+  margin: { l: 150, r: 150, t: 50, b: 20 }
 };
-vegaEmbed('#chart', spec, {actions: false, renderer: 'svg'});
+
+Plotly.newPlot("sankey", data, layout, { responsive: true, displayModeBar: false });
 </script>
 </body>
 </html>
