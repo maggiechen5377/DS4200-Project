@@ -108,7 +108,12 @@ const genreData = [
   {"Genre":"Strategy","Region":"Other","Sales":9.47,"Pct":6.4,"Total":147.24}
 ];
 
-const sortOrder = ["Action","Sports","Shooter","Role-Playing","Platform","Misc","Racing","Fighting","Simulation","Puzzle","Adventure","Strategy"];
+const sortOptions = {
+  "Total Sales": ["Action","Sports","Shooter","Role-Playing","Platform","Misc","Racing","Fighting","Simulation","Puzzle","Adventure","Strategy"],
+  "NA Sales":    ["Action","Sports","Shooter","Role-Playing","Platform","Misc","Racing","Fighting","Simulation","Puzzle","Adventure","Strategy"],
+  "EU Sales":    ["Action","Sports","Shooter","Role-Playing","Platform","Misc","Racing","Fighting","Simulation","Puzzle","Adventure","Strategy"],
+  "JP Sales":    ["Role-Playing","Action","Sports","Puzzle","Platform","Misc","Fighting","Shooter","Racing","Simulation","Adventure","Strategy"]
+};
 
 const spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
@@ -119,24 +124,36 @@ const spec = {
     "legend": {"labelColor":"#64748b","titleColor":"#64748b","labelFont":"Outfit","titleFont":"Outfit"}
   },
   "data": {"values": genreData},
-  "mark": {"type": "bar", "cornerRadiusEnd": 2},
-  "encoding": {
-    "x": {"field":"Sales","type":"quantitative","title":"Total Sales (millions)"},
-    "y": {"field":"Genre","type":"nominal","title":"Genre","sort": sortOrder},
-    "color": {
-      "field":"Region","type":"nominal","title":"Region",
-      "scale": {"domain":["North America","Europe","Japan","Other"],"range":["#00ff88","#00d4ff","#ff5f5f","#ffd060"]}
+  "layer": [
+    {
+      "mark": {"type": "bar"},
+      "encoding": {
+        "x": {"field":"Sales","type":"quantitative","title":"Total Sales (millions)"},
+        "y": {"field":"Genre","type":"nominal","title":"Genre","sort": sortOptions["Total Sales"]},
+        "color": {
+          "field":"Region","type":"nominal","title":"Region",
+          "scale": {"domain":["North America","Europe","Japan","Other"],"range":["#F58518","#E45756","#4C78A8","#72B7B2"]}
+        },
+        "opacity": {"condition":{"param":"sel","value":1.0},"value":0.3},
+        "tooltip": [
+          {"field":"Genre","title":"Genre"},
+          {"field":"Region","title":"Region"},
+          {"field":"Sales","title":"Sales (M)","format":".1f"},
+          {"field":"Pct","title":"% of Genre","format":".1f"},
+          {"field":"Total","title":"Genre Total (M)","format":".1f"}
+        ]
+      },
+      "params": [{"name":"sel","select":{"type":"point","fields":["Genre"],"on":"click"},"value":[]}]
     },
-    "opacity": {"condition":{"param":"sel","value":1.0},"value":0.2},
-    "tooltip": [
-      {"field":"Genre","title":"Genre"},
-      {"field":"Region","title":"Region"},
-      {"field":"Sales","title":"Sales (M)","format":".1f"},
-      {"field":"Pct","title":"% of Genre","format":".1f"},
-      {"field":"Total","title":"Genre Total (M)","format":".1f"}
-    ]
-  },
-  "params": [{"name":"sel","select":{"type":"point","fields":["Genre"],"on":"click"},"value":[]}],
+    {
+      "mark": {"type":"text","align":"right","color":"#64748b","fontSize":11},
+      "encoding": {
+        "x": {"value": 720},
+        "y": {"value": -10},
+        "text": {"value": "Click to highlight · Double-click to reset"}
+      }
+    }
+  ],
   "title": "Video Game Sales by Genre and Region",
   "width": 720,
   "height": 420
