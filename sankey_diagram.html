@@ -67,11 +67,10 @@ const data = [{
   type: "sankey",
   orientation: "h",
   node: {
-    pad: 25,
+    pad: 30,
     thickness: 20,
     line: { color: "black", width: 0.5 },
-    label: labels,
-    color: "rgba(100, 116, 139, 0.8)"
+    label: labels
   },
   link: {
     source: sources,
@@ -84,9 +83,9 @@ const layout = {
   title: { text: "Publisher vs Genre Sankey Diagram", font: { family: "Outfit, sans-serif", color: "#e2e8f0", size: 14 } },
   paper_bgcolor: "transparent",
   plot_bgcolor: "transparent",
-  font: { family: "Outfit, sans-serif", color: "#e2e8f0", size: 12 },
-  height: 600,
-  margin: { l: 150, r: 150, t: 50, b: 20 }
+  font: { family: "Outfit, sans-serif", color: "#ffffff", size: 14 },
+  height: 700,
+  margin: { l: 180, r: 180, t: 50, b: 20 }
 };
 
 Plotly.newPlot("sankey", data, layout, { responsive: true, displayModeBar: false });
