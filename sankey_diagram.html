@@ -70,7 +70,11 @@ const data = [{
     pad: 30,
     thickness: 20,
     line: { color: "black", width: 0.5 },
-    label: labels
+    label: labels,
+    color: [
+      "#00ff88","#00d4ff","#ff5f5f","#ffd060","#a855f7","#f97316","#ec4899","#22d3ee",
+      "#4ade80","#fb923c","#f472b6","#818cf8","#34d399","#facc15","#38bdf8","#e879f9","#f87171","#a3e635","#60a5fa","#94a3b8"
+    ]
   },
   link: {
     source: sources,
@@ -83,7 +87,7 @@ const layout = {
   title: { text: "Publisher vs Genre Sankey Diagram", font: { family: "Outfit, sans-serif", color: "#e2e8f0", size: 14 } },
   paper_bgcolor: "transparent",
   plot_bgcolor: "transparent",
-  font: { family: "Outfit, sans-serif", color: "#ffffff", size: 14 },
+  font: { family: "Outfit, sans-serif", color: "#ffffff", size: 16 },
   height: 700,
   margin: { l: 180, r: 180, t: 50, b: 20 }
 };
