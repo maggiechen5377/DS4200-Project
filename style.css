@@ -102,7 +102,7 @@ body::before {
   display: block;
   padding: 0.28rem 0.65rem;
   border-radius: 4px;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: var(--muted);
   transition: color 0.2s, background 0.2s;
@@ -301,7 +301,7 @@ body::before {
   margin-bottom: 1rem;
 }
 .overview-block p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--muted);
   line-height: 1.8;
   margin-bottom: 0.75rem;
@@ -479,7 +479,7 @@ body::before {
   margin-bottom: 1rem;
 }
 .info-card p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--muted);
   margin-bottom: 0.75rem;
   line-height: 1.8;
@@ -498,7 +498,7 @@ body::before {
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.5rem 0.9rem;
-  font-size: 0.81rem;
+  font-size: 0.95rem;
   color: var(--muted);
   transition: border-color 0.2s;
 }
@@ -530,13 +530,13 @@ body::before {
   background: linear-gradient(90deg, var(--green), var(--cyan));
 }
 .finding-card h4 {
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text);
   margin-bottom: 0.6rem;
   line-height: 1.4;
 }
-.finding-card p { font-size: 0.85rem; color: var(--muted); margin: 0; line-height: 1.75; }
+.finding-card p { font-size: 1rem; color: var(--muted); margin: 0; line-height: 1.75; }
 
 /* ============================================================
    VIZ PAGES
@@ -624,7 +624,7 @@ body::before {
   letter-spacing: 0.1em;
   margin-bottom: 0.9rem;
 }
-.desc-panel p { font-size: 0.87rem; color: var(--muted); line-height: 1.8; }
+.desc-panel p { font-size: 1rem; color: var(--muted); line-height: 1.8; }
 
 /* ============================================================
    TOOLTIP
