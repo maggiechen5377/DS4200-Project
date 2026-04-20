@@ -670,6 +670,36 @@ body::before {
 }
 
 /* ============================================================
+   PAGE NAVIGATION BUTTONS
+   ============================================================ */
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1140px;
+  margin: 2rem auto 0;
+  padding: 0 2rem 3rem;
+  gap: 1rem;
+}
+.page-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.page-nav a:hover {
+  border-color: var(--green);
+  color: var(--green);
+  box-shadow: 0 0 14px rgba(0,255,136,0.15);
+}
+.page-nav .spacer { flex: 1; }
+
+/* ============================================================
    ANIMATIONS
    ============================================================ */
 @keyframes fadeUp {
