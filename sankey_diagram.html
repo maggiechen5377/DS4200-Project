@@ -73,11 +73,14 @@ const data = [{
   type: "sankey",
   orientation: "h",
   node: {
-    pad: 50,
-    thickness: 20,
-    line: { color: "rgba(0,0,0,0.2)", width: 0.5 },
+    pad: 30,
+    thickness: 25,
+    line: { color: "black", width: 0.5 },
     label: labels,
-    color: ['#1C29E3', '#F02C0A', '#0BCD8F', '#6615BC', '#F3EF08', '#10A3BD', '#EF7111', '#25C04E', '#1C29E3', '#25C04E', '#6615BC', '#10A3BD', '#F3EF08', '#F3EF08', '#F02C0A', '#F3EF08', '#1C29E3', '#F02C0A', '#F02C0A', '#6615BC']
+    color: [
+      "#00ff88","#00d4ff","#ff5f5f","#ffd060","#a855f7","#f97316","#ec4899","#22d3ee",
+      "#4ade80","#fb923c","#f472b6","#818cf8","#34d399","#facc15","#38bdf8","#e879f9","#f87171","#a3e635","#60a5fa","#94a3b8"
+    ]
   },
   link: {
     source: sources,
@@ -92,9 +95,11 @@ const layout = {
   paper_bgcolor: "transparent",
   plot_bgcolor: "transparent",
   font: { family: "Outfit, sans-serif", color: "#0f172a", size: 16 },
-  height: 600,
-  margin: { l: 20, r: 20, t: 40, b: 20 }
+  height: 700,
+  margin: { l: 180, r: 180, t: 50, b: 20 }
 };
+
+const originalLinkColors = data[0].link.color.slice();
 
 Plotly.newPlot("sankey", data, layout, { responsive: true, displayModeBar: false });
 
@@ -102,25 +107,25 @@ Plotly.newPlot("sankey", data, layout, { responsive: true, displayModeBar: false
 document.getElementById('sankey').on('plotly_click', function(d) {
   if (!d || !d.points || d.points.length === 0) return;
   const pt = d.points[0];
-  const allLinks = data[0].link;
-  const idx = pt.pointNumber;
   const isNode = pt.hasOwnProperty('index');
+  const linkSources = data[0].link.source;
+  const linkTargets = data[0].link.target;
 
-  let newColors = allLinks.color.map((c, i) => {
+  let newColors = originalLinkColors.map((c, i) => {
     if (isNode) {
-      return (allLinks.source[i] === pt.index || allLinks.target[i] === pt.index)
-        ? allLinks.color[i]
-        : 'rgba(200,200,200,0.15)';
+      return (linkSources[i] === pt.index || linkTargets[i] === pt.index)
+        ? originalLinkColors[i]
+        : 'rgba(200,200,200,0.2)';
     }
-    return i === idx ? allLinks.color[i] : 'rgba(200,200,200,0.15)';
+    return i === pt.pointNumber ? originalLinkColors[i] : 'rgba(200,200,200,0.2)';
   });
 
   Plotly.restyle('sankey', {'link.color': [newColors]});
 });
 
-// Click background to reset
+// Double click to reset
 document.getElementById('sankey').on('plotly_doubleclick', function() {
-  Plotly.restyle('sankey', {'link.color': [data[0].link.color]});
+  Plotly.restyle('sankey', {'link.color': [originalLinkColors]});
 });
 </script>
 </body>
